@@ -1,0 +1,30 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs",
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/node_modules/**",
+    "**/dist/**"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "includeVersion": true,
+  "theme": "default",
+  "name": "Lucid Aptos Protocol TypeScript SDK",
+  "description": "TypeScript SDK for the Lucid Aptos Protocol",
+  "readme": "README.md",
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Core",
+    "Protocol",
+    "Utilities",
+    "*"
+  ],
+  "defaultCategory": "Other",
+  "plugin": ["typedoc-plugin-markdown"],
+  "mdHideSources": true,
+  "mdSourceLink": true,
+  "mdSourceBranch": "main"
+} 

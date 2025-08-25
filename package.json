@@ -1,0 +1,56 @@
+{
+  "name": "lucid-aptos-ts-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "dist/lucid-aptos-sdk.cjs.js",
+  "module": "dist/lucid-aptos-sdk.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/lucid-aptos-sdk.es.js",
+      "require": "./dist/lucid-aptos-sdk.cjs.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "docs": "typedoc",
+    "clean": "rm -rf dist docs coverage",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.5.2",
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "jest": "^30.0.5",
+    "prettier": "^3.6.2",
+    "rollup": "^4.47.1",
+    "terser": "^5.43.1",
+    "ts-jest": "^29.4.1",
+    "typedoc": "^0.28.10",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3"
+  },
+  "dependencies": {
+    "@aptos-labs/ts-sdk": "^4.0.0"
+  }
+}
