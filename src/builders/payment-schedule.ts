@@ -2,7 +2,7 @@
 // Handles payment schedule update functions
 
 import { HybridLoanBookBuilder } from "./index";
-import type { BuilderResult, ObjectAddress } from "../types";
+import type { EnhancedBuilderResult, ObjectAddress } from "../types";
 
 /**
  * Builder for the update_current_payment_fee function
@@ -26,7 +26,7 @@ export class UpdateCurrentPaymentFeeBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.loan) throw new Error("Loan is required");
     if (!this.newFee) throw new Error("New fee is required");
 
@@ -35,7 +35,7 @@ export class UpdateCurrentPaymentFeeBuilder extends HybridLoanBookBuilder {
       this.newFee,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -67,7 +67,7 @@ export class AddFeeAndInterestToCurrentPaymentBuilder extends HybridLoanBookBuil
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.loan) throw new Error("Loan is required");
     if (!this.additionalFee) throw new Error("Additional fee is required");
     if (!this.additionalInterest) throw new Error("Additional interest is required");
@@ -78,7 +78,7 @@ export class AddFeeAndInterestToCurrentPaymentBuilder extends HybridLoanBookBuil
       this.additionalInterest,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -134,7 +134,7 @@ export class UpdatePaymentScheduleByIndexBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.loan) throw new Error("Loan is required");
     if (this.index === undefined) throw new Error("Index is required");
     if (!this.newTimeDueUs) throw new Error("New time due is required");
@@ -153,7 +153,7 @@ export class UpdatePaymentScheduleByIndexBuilder extends HybridLoanBookBuilder {
       this.newStatus,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -190,7 +190,7 @@ export class UpdatePaymentScheduleBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.loan) throw new Error("Loan is required");
     if (this.timeDueUs.length === 0) throw new Error("Payment schedule is required");
 
@@ -202,7 +202,7 @@ export class UpdatePaymentScheduleBuilder extends HybridLoanBookBuilder {
       this.fee,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -234,7 +234,7 @@ export class UpdateCurrentPaymentFeeBySeedBuilder extends HybridLoanBookBuilder 
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.config) throw new Error("Config is required");
     if (!this.loanSeed) throw new Error("Loan seed is required");
     if (!this.newFee) throw new Error("New fee is required");
@@ -245,7 +245,7 @@ export class UpdateCurrentPaymentFeeBySeedBuilder extends HybridLoanBookBuilder 
       this.newFee,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -283,7 +283,7 @@ export class AddFeeAndInterestToCurrentPaymentBySeedBuilder extends HybridLoanBo
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.config) throw new Error("Config is required");
     if (!this.loanSeed) throw new Error("Loan seed is required");
     if (!this.additionalFee) throw new Error("Additional fee is required");
@@ -296,7 +296,7 @@ export class AddFeeAndInterestToCurrentPaymentBySeedBuilder extends HybridLoanBo
       this.additionalInterest,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -358,7 +358,7 @@ export class UpdatePaymentScheduleByIndexAndSeedBuilder extends HybridLoanBookBu
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.config) throw new Error("Config is required");
     if (!this.loanSeed) throw new Error("Loan seed is required");
     if (this.index === undefined) throw new Error("Index is required");
@@ -379,7 +379,7 @@ export class UpdatePaymentScheduleByIndexAndSeedBuilder extends HybridLoanBookBu
       this.newStatus,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -422,7 +422,7 @@ export class UpdatePaymentScheduleBySeedBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.config) throw new Error("Config is required");
     if (!this.loanSeed) throw new Error("Loan seed is required");
     if (this.timeDueUs.length === 0) throw new Error("Payment schedule is required");
@@ -436,7 +436,7 @@ export class UpdatePaymentScheduleBySeedBuilder extends HybridLoanBookBuilder {
       this.fee,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 

@@ -2,7 +2,7 @@
 // Handles offer_loan_simple and offer_loan functions
 
 import { HybridLoanBookBuilder } from "./index";
-import type { BuilderResult, AccountAddress, ObjectAddress } from "../types";
+import type { EnhancedBuilderResult, AccountAddress, ObjectAddress } from "../types";
 
 /**
  * Builder for the offer_loan_simple function
@@ -73,7 +73,7 @@ export class OfferLoanSimpleBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.config) throw new Error("Config is required");
     if (!this.seed) throw new Error("Seed is required");
     if (!this.borrower) throw new Error("Borrower is required");
@@ -93,7 +93,7 @@ export class OfferLoanSimpleBuilder extends HybridLoanBookBuilder {
       this.riskScore ? [this.riskScore] : [], // Option<u64>
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -172,7 +172,7 @@ export class OfferLoanBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.sender) throw new Error("Sender is required");
     if (!this.config) throw new Error("Config is required");
     if (!this.seed) throw new Error("Seed is required");
@@ -194,7 +194,7 @@ export class OfferLoanBuilder extends HybridLoanBookBuilder {
       this.riskScore ? [this.riskScore] : [], // Option<u64>
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 

@@ -2,7 +2,7 @@
 // Handles add_document and add_document_for functions
 
 import { HybridLoanBookBuilder } from "./index";
-import type { BuilderResult, AccountAddress, ObjectAddress } from "../types";
+import type { EnhancedBuilderResult, AccountAddress, ObjectAddress } from "../types";
 
 /**
  * Builder for the add_document function
@@ -38,7 +38,7 @@ export class AddDocumentBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.loan) throw new Error("Loan is required");
     if (!this.name) throw new Error("Document name is required");
     if (!this.description) throw new Error("Document description is required");
@@ -51,7 +51,7 @@ export class AddDocumentBuilder extends HybridLoanBookBuilder {
       Array.from(this.hash),
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -96,7 +96,7 @@ export class AddDocumentForBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.sender) throw new Error("Sender is required");
     if (!this.loan) throw new Error("Loan is required");
     if (!this.name) throw new Error("Document name is required");
@@ -111,7 +111,42 @@ export class AddDocumentForBuilder extends HybridLoanBookBuilder {
       Array.from(this.hash),
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
+  }
+}
+
+/**
+ * Builder for the update_current_payment_fee function (accessible via documents namespace)
+ * Update the current payment fee for a loan
+ */
+export class UpdateCurrentPaymentFeeBuilder extends HybridLoanBookBuilder {
+  private loan?: ObjectAddress;
+  private newFee?: string;
+
+  constructor(moduleAddress: string) {
+    super(moduleAddress, "update_current_payment_fee");
+  }
+
+  setLoan(loan: ObjectAddress): this {
+    this.loan = loan;
+    return this;
+  }
+
+  setNewFee(fee: string): this {
+    this.newFee = fee;
+    return this;
+  }
+
+  build(): EnhancedBuilderResult {
+    if (!this.loan) throw new Error("Loan is required");
+    if (!this.newFee) throw new Error("New fee is required");
+
+    const functionArguments = [
+      this.loan,
+      this.newFee,
+    ];
+
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -137,5 +172,12 @@ export class DocumentsBuilder {
    */
   addDocumentFor(): AddDocumentForBuilder {
     return new AddDocumentForBuilder(this.moduleAddress);
+  }
+
+  /**
+   * Create an update_current_payment_fee builder (convenience method)
+   */
+  updateCurrentPaymentFee(): UpdateCurrentPaymentFeeBuilder {
+    return new UpdateCurrentPaymentFeeBuilder(this.moduleAddress);
   }
 }

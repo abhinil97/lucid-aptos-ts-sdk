@@ -2,7 +2,7 @@
 // Handles repay_loan, repay_loan_by_seed, repay_loan_historical, and repay_loan_historical_with_seed
 
 import { HybridLoanBookBuilder } from "./index";
-import type { BuilderResult, AccountAddress, ObjectAddress } from "../types";
+import type { EnhancedBuilderResult, AccountAddress, ObjectAddress } from "../types";
 
 /**
  * Builder for the repay_loan function
@@ -26,7 +26,7 @@ export class RepayLoanBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.loan) throw new Error("Loan is required");
     if (!this.amount) throw new Error("Amount is required");
 
@@ -35,7 +35,7 @@ export class RepayLoanBuilder extends HybridLoanBookBuilder {
       this.amount,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -67,7 +67,7 @@ export class RepayLoanBySeedBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.config) throw new Error("Config is required");
     if (!this.loanSeed) throw new Error("Loan seed is required");
     if (!this.amount) throw new Error("Amount is required");
@@ -78,7 +78,7 @@ export class RepayLoanBySeedBuilder extends HybridLoanBookBuilder {
       this.amount,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -116,7 +116,7 @@ export class RepayLoanHistoricalBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.adminSigner) throw new Error("Admin signer is required");
     if (!this.loan) throw new Error("Loan is required");
     if (!this.amount) throw new Error("Amount is required");
@@ -129,7 +129,7 @@ export class RepayLoanHistoricalBuilder extends HybridLoanBookBuilder {
       this.timestamp,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 
@@ -173,7 +173,7 @@ export class RepayLoanHistoricalWithSeedBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.adminSigner) throw new Error("Admin signer is required");
     if (!this.config) throw new Error("Config is required");
     if (!this.loanSeed) throw new Error("Loan seed is required");
@@ -188,7 +188,7 @@ export class RepayLoanHistoricalWithSeedBuilder extends HybridLoanBookBuilder {
       this.timestamp,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 

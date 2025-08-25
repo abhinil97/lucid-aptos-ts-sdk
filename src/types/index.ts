@@ -62,6 +62,12 @@ export interface BuilderResult extends InputEntryFunctionData {
   moduleName: string;
 }
 
+// Enhanced builder result that can be used directly with aptos.signAndSubmitTransaction
+export interface EnhancedBuilderResult extends BuilderResult {
+  // Convenience methods for direct transaction handling
+  toTransactionData(): InputEntryFunctionData;
+}
+
 // Transaction payload type
 export interface TransactionPayload {
   [key: string]: unknown;

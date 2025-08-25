@@ -2,7 +2,7 @@
 // Handles set_auto_pledge_config and other configuration functions
 
 import { HybridLoanBookBuilder } from "./index";
-import type { BuilderResult, ObjectAddress } from "../types";
+import type { EnhancedBuilderResult, ObjectAddress } from "../types";
 
 /**
  * Builder for the set_auto_pledge_config function
@@ -32,7 +32,7 @@ export class SetAutoPledgeConfigBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  build(): BuilderResult {
+  build(): EnhancedBuilderResult {
     if (!this.config) throw new Error("Config is required");
     if (this.enabled === undefined) throw new Error("Enabled flag is required");
     if (!this.facility) throw new Error("Facility is required");
@@ -43,7 +43,7 @@ export class SetAutoPledgeConfigBuilder extends HybridLoanBookBuilder {
       this.facility,
     ];
 
-    return this.createBuilderResult([], functionArguments);
+    return this.createEnhancedBuilderResult([], functionArguments);
   }
 }
 

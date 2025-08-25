@@ -1,44 +1,62 @@
-// Basic usage example for the Lucid Aptos Protocol TypeScript SDK
-import { TransactionBuilder, AccountBuilder, isValidAptosAddress, formatAddress } from '../src';
+// Basic utilities example for the Lucid Aptos Protocol TypeScript SDK
+// Demonstrates core SDK utilities: address validation, hex conversion, and basic configuration
+import { isValidAptosAddress, formatAddress, toHex, fromHex, LucidClient } from '../src';
 
-async function basicExample() {
-  console.log('🚀 Lucid Aptos Protocol TypeScript SDK - Basic Usage Example');
+async function basicUtilitiesExample() {
+  console.log('🚀 Lucid SDK - Basic Utilities Example\n');
 
-  // Example 1: Address validation
-  const testAddress = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
-  console.log(`\n📍 Address Validation:`);
-  console.log(`Address: ${testAddress}`);
-  console.log(`Is valid: ${isValidAptosAddress(testAddress)}`);
-  console.log(`Formatted: ${formatAddress(testAddress)}`);
+  // Example 1: Address validation and formatting
+  console.log('📍 Address Utilities:');
+  const addresses = [
+    '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+    '0xabcd', // Invalid - too short
+    'not-an-address', // Invalid format
+  ];
 
-  // Example 2: Building a transaction
-  console.log(`\n📝 Transaction Builder:`);
-  const transaction = new TransactionBuilder()
-    .setSender(testAddress)
-    .setPayload({ function: 'transfer', args: ['0x...', 100] })
-    .setGasLimit(3000)
-    .setMaxGasAmount(3000)
-    .setGasUnitPrice(150)
-    .build();
+  addresses.forEach((address, index) => {
+    console.log(`  ${index + 1}. ${address}`);
+    if (isValidAptosAddress(address)) {
+      console.log(`     ✅ Valid → ${formatAddress(address)}`);
+    } else {
+      console.log(`     ❌ Invalid`);
+    }
+  });
+
+  // Example 2: Hex conversion utilities
+  console.log('\n🔢 Hex Utilities:');
+  const testString = 'Hello Aptos';
+  const testNumber = 12345;
+  const testBytes = new TextEncoder().encode('SDK');
+
+  console.log(`  String "${testString}" → ${toHex(testString)}`);
+  console.log(`  Number ${testNumber} → ${toHex(testNumber)}`);
+  console.log(`  Bytes → ${toHex(testBytes)}`);
   
-  console.log('Transaction:', JSON.stringify(transaction, null, 2));
+  const hexValue = '0x48656c6c6f204170746f73';
+  console.log(`  Hex ${hexValue} → "${new TextDecoder().decode(fromHex(hexValue))}"`);
 
-  // Example 3: Building an account
-  console.log(`\n👤 Account Builder:`);
-  const account = new AccountBuilder()
-    .setAddress(testAddress)
-    .setSequenceNumber('42')
-    .setAuthenticationKey('0x...')
-    .build();
-  
-  console.log('Account:', JSON.stringify(account, null, 2));
+  // Example 3: Initialize LucidClient (basic configuration)
+  console.log('\n🔧 Client Initialization:');
+  try {
+    const client = new LucidClient({
+      protocol: {
+        network: 'devnet',
+        rpcUrl: 'https://devnet.aptoslabs.com',
+      },
+    });
+    
+    console.log(`  ✅ Client initialized for ${client.getNetwork()}`);
+    console.log(`  📡 RPC URL: ${client.getRpcUrl()}`);
+  } catch (error) {
+    console.log(`  ❌ Client initialization failed: ${error}`);
+  }
 
-  console.log(`\n✅ Basic example completed successfully!`);
+  console.log('\n✅ Basic utilities example completed!');
 }
 
 // Run the example
-if (require.main === module) {
-  basicExample().catch(console.error);
+if (import.meta.url === `file://${process.argv[1]}`) {
+  basicUtilitiesExample().catch(console.error);
 }
 
-export { basicExample }; 
+export { basicUtilitiesExample }; 

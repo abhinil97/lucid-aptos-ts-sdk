@@ -25,7 +25,11 @@
     "format:check": "prettier --check \"src/**/*.ts\"",
     "docs": "typedoc",
     "clean": "rm -rf dist docs coverage",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "example:basic": "tsx examples/basic-usage.ts",
+    "example:hybrid-basic": "tsx examples/hybrid-loan-book-basic.ts",
+    "example:hybrid-advanced": "tsx examples/hybrid-loan-book-advanced.ts",
+    "example:advanced": "tsx examples/advanced-usage.ts"
   },
   "keywords": [],
   "author": "",
@@ -46,6 +50,7 @@
     "rollup": "^4.47.1",
     "terser": "^5.43.1",
     "ts-jest": "^29.4.1",
+    "tsx": "^4.19.1",
     "typedoc": "^0.28.10",
     "typescript": "^5.9.2",
     "vite": "^7.1.3"
