@@ -1,23 +1,15 @@
 // Hybrid Loan Book Client for interacting with the pact::hybrid_loan_book module
 // Main SDK client that orchestrates all builders and provides transaction submission
 
-import { 
-  Aptos, 
-  AptosConfig, 
-  Network,
-  Account
-} from "@aptos-labs/ts-sdk";
-import type { 
-  InputEntryFunctionData,
-  UserTransactionResponse
-} from "@aptos-labs/ts-sdk";
-import type { LucidConfig, BuilderResult, NetworkName } from "../types";
-import { DEFAULT_NETWORK_CONFIGS } from "../config/networks";
-import { LoanCreationBuilder } from "../builders/loan-creation";
-import { LoanRepaymentBuilder } from "../builders/loan-repayment";
-import { PaymentScheduleBuilder } from "../builders/payment-schedule";
-import { DocumentsBuilder } from "../builders/documents";
-import { ConfigurationBuilder } from "../builders/configuration";
+import { Aptos, AptosConfig, Network, Account } from '@aptos-labs/ts-sdk';
+import type { InputEntryFunctionData, UserTransactionResponse } from '@aptos-labs/ts-sdk';
+import type { LucidConfig, BuilderResult, NetworkName } from '../types';
+import { DEFAULT_NETWORK_CONFIGS } from '../config/networks';
+import { LoanCreationBuilder } from '../builders/loan-creation';
+import { LoanRepaymentBuilder } from '../builders/loan-repayment';
+import { PaymentScheduleBuilder } from '../builders/payment-schedule';
+import { DocumentBuilder } from '../builders/documents';
+import { ConfigurationBuilder } from '../builders/configuration';
 
 /**
  * Main client for interacting with the Hybrid Loan Book module
@@ -32,19 +24,21 @@ export class HybridLoanBookClient {
   public readonly loanCreation: LoanCreationBuilder;
   public readonly loanRepayment: LoanRepaymentBuilder;
   public readonly paymentSchedule: PaymentScheduleBuilder;
-  public readonly documents: DocumentsBuilder;
+  public readonly documents: DocumentBuilder;
   public readonly configuration: ConfigurationBuilder;
 
   constructor(config: Partial<LucidConfig> = {}) {
     // Set up default configuration
     const network = config.protocol?.network || 'devnet';
     const networkConfig = DEFAULT_NETWORK_CONFIGS[network as NetworkName];
-    
+
     this.config = {
       protocol: {
         network,
         rpcUrl: config.protocol?.rpcUrl || networkConfig.rpcUrl,
-        ...(networkConfig.faucetUrl && { faucetUrl: config.protocol?.faucetUrl || networkConfig.faucetUrl }),
+        ...(networkConfig.faucetUrl && {
+          faucetUrl: config.protocol?.faucetUrl || networkConfig.faucetUrl,
+        }),
       },
       moduleAddress: config.moduleAddress || networkConfig.moduleAddress,
       timeout: config.timeout || 30000,
@@ -54,7 +48,7 @@ export class HybridLoanBookClient {
     this.moduleAddress = this.config.moduleAddress!;
 
     // Initialize Aptos SDK client
-    const aptosConfig = new AptosConfig({ 
+    const aptosConfig = new AptosConfig({
       network: this.getAptosNetwork(network),
       fullnode: this.config.protocol.rpcUrl,
     });
@@ -64,7 +58,7 @@ export class HybridLoanBookClient {
     this.loanCreation = new LoanCreationBuilder(this.moduleAddress);
     this.loanRepayment = new LoanRepaymentBuilder(this.moduleAddress);
     this.paymentSchedule = new PaymentScheduleBuilder(this.moduleAddress);
-    this.documents = new DocumentsBuilder(this.moduleAddress);
+    this.documents = new DocumentBuilder(this.moduleAddress);
     this.configuration = new ConfigurationBuilder(this.moduleAddress);
   }
 
@@ -148,7 +142,9 @@ export class HybridLoanBookClient {
 
       return response as UserTransactionResponse;
     } catch (error) {
-      throw new Error(`Transaction failed: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Transaction failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
@@ -156,10 +152,7 @@ export class HybridLoanBookClient {
    * Simulate a transaction without submitting it
    * Useful for gas estimation and testing
    */
-  async simulateTransaction(
-    signer: Account,
-    builderResult: BuilderResult
-  ): Promise<any> {
+  async simulateTransaction(signer: Account, builderResult: BuilderResult): Promise<any> {
     try {
       const transactionData = this.buildTransaction(builderResult);
 
@@ -173,7 +166,9 @@ export class HybridLoanBookClient {
         transaction,
       });
     } catch (error) {
-      throw new Error(`Simulation failed: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Simulation failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
@@ -200,9 +195,7 @@ export class HybridLoanBookClient {
    * Create a simple transaction that users can submit directly with aptos-ts-sdk
    * This is the main integration point - returns InputEntryFunctionData
    */
-  async createTransaction(
-    builderResult: BuilderResult
-  ): Promise<InputEntryFunctionData> {
+  async createTransaction(builderResult: BuilderResult): Promise<InputEntryFunctionData> {
     return this.buildTransaction(builderResult);
   }
 }

@@ -1,8 +1,9 @@
-// Payment Schedule builders for Hybrid Loan Book
+// Payment Schedule builders for Hybrid Loan Book with proper Move type safety
 // Handles payment schedule update functions
 
-import { HybridLoanBookBuilder } from "./index";
-import type { EnhancedBuilderResult, ObjectAddress } from "../types";
+import { HybridLoanBookBuilder } from './base';
+import type { EnhancedBuilderResult, ObjectAddress, U64 } from '../types';
+import { MoveTypes } from '../types';
 
 /**
  * Builder for the update_current_payment_fee function
@@ -10,10 +11,10 @@ import type { EnhancedBuilderResult, ObjectAddress } from "../types";
  */
 export class UpdateCurrentPaymentFeeBuilder extends HybridLoanBookBuilder {
   private loan?: ObjectAddress;
-  private newFee?: string;
+  private newFee?: U64;
 
   constructor(moduleAddress: string) {
-    super(moduleAddress, "update_current_payment_fee");
+    super(moduleAddress, 'update_current_payment_fee');
   }
 
   setLoan(loan: ObjectAddress): this {
@@ -21,19 +22,16 @@ export class UpdateCurrentPaymentFeeBuilder extends HybridLoanBookBuilder {
     return this;
   }
 
-  setNewFee(fee: string): this {
-    this.newFee = fee;
+  setNewFee(fee: string | number | bigint): this {
+    this.newFee = MoveTypes.u64(fee);
     return this;
   }
 
   build(): EnhancedBuilderResult {
-    if (!this.loan) throw new Error("Loan is required");
-    if (!this.newFee) throw new Error("New fee is required");
+    if (!this.loan) throw new Error('Loan is required');
+    if (!this.newFee) throw new Error('New fee is required');
 
-    const functionArguments = [
-      this.loan,
-      this.newFee,
-    ];
+    const functionArguments = [this.loan, this.newFee];
 
     return this.createEnhancedBuilderResult([], functionArguments);
   }
@@ -45,11 +43,11 @@ export class UpdateCurrentPaymentFeeBuilder extends HybridLoanBookBuilder {
  */
 export class AddFeeAndInterestToCurrentPaymentBuilder extends HybridLoanBookBuilder {
   private loan?: ObjectAddress;
-  private additionalFee?: string;
-  private additionalInterest?: string;
+  private additionalFee?: U64;
+  private additionalInterest?: U64;
 
   constructor(moduleAddress: string) {
-    super(moduleAddress, "add_fee_and_interest_to_current_payment");
+    super(moduleAddress, 'add_fee_and_interest_to_current_payment');
   }
 
   setLoan(loan: ObjectAddress): this {
@@ -57,26 +55,22 @@ export class AddFeeAndInterestToCurrentPaymentBuilder extends HybridLoanBookBuil
     return this;
   }
 
-  setAdditionalFee(fee: string): this {
-    this.additionalFee = fee;
+  setAdditionalFee(fee: string | number | bigint): this {
+    this.additionalFee = MoveTypes.u64(fee);
     return this;
   }
 
-  setAdditionalInterest(interest: string): this {
-    this.additionalInterest = interest;
+  setAdditionalInterest(interest: string | number | bigint): this {
+    this.additionalInterest = MoveTypes.u64(interest);
     return this;
   }
 
   build(): EnhancedBuilderResult {
-    if (!this.loan) throw new Error("Loan is required");
-    if (!this.additionalFee) throw new Error("Additional fee is required");
-    if (!this.additionalInterest) throw new Error("Additional interest is required");
+    if (!this.loan) throw new Error('Loan is required');
+    if (!this.additionalFee) throw new Error('Additional fee is required');
+    if (!this.additionalInterest) throw new Error('Additional interest is required');
 
-    const functionArguments = [
-      this.loan,
-      this.additionalFee,
-      this.additionalInterest,
-    ];
+    const functionArguments = [this.loan, this.additionalFee, this.additionalInterest];
 
     return this.createEnhancedBuilderResult([], functionArguments);
   }
@@ -96,7 +90,7 @@ export class UpdatePaymentScheduleByIndexBuilder extends HybridLoanBookBuilder {
   private newStatus?: number;
 
   constructor(moduleAddress: string) {
-    super(moduleAddress, "update_payment_schedule_by_index");
+    super(moduleAddress, 'update_payment_schedule_by_index');
   }
 
   setLoan(loan: ObjectAddress): this {
@@ -135,13 +129,13 @@ export class UpdatePaymentScheduleByIndexBuilder extends HybridLoanBookBuilder {
   }
 
   build(): EnhancedBuilderResult {
-    if (!this.loan) throw new Error("Loan is required");
-    if (this.index === undefined) throw new Error("Index is required");
-    if (!this.newTimeDueUs) throw new Error("New time due is required");
-    if (!this.newPrincipal) throw new Error("New principal is required");
-    if (!this.newInterest) throw new Error("New interest is required");
-    if (!this.newFee) throw new Error("New fee is required");
-    if (this.newStatus === undefined) throw new Error("New status is required");
+    if (!this.loan) throw new Error('Loan is required');
+    if (this.index === undefined) throw new Error('Index is required');
+    if (!this.newTimeDueUs) throw new Error('New time due is required');
+    if (!this.newPrincipal) throw new Error('New principal is required');
+    if (!this.newInterest) throw new Error('New interest is required');
+    if (!this.newFee) throw new Error('New fee is required');
+    if (this.newStatus === undefined) throw new Error('New status is required');
 
     const functionArguments = [
       this.loan,
@@ -169,7 +163,7 @@ export class UpdatePaymentScheduleBuilder extends HybridLoanBookBuilder {
   private fee: string[] = [];
 
   constructor(moduleAddress: string) {
-    super(moduleAddress, "update_payment_schedule");
+    super(moduleAddress, 'update_payment_schedule');
   }
 
   setLoan(loan: ObjectAddress): this {
@@ -191,16 +185,10 @@ export class UpdatePaymentScheduleBuilder extends HybridLoanBookBuilder {
   }
 
   build(): EnhancedBuilderResult {
-    if (!this.loan) throw new Error("Loan is required");
-    if (this.timeDueUs.length === 0) throw new Error("Payment schedule is required");
+    if (!this.loan) throw new Error('Loan is required');
+    if (this.timeDueUs.length === 0) throw new Error('Payment schedule is required');
 
-    const functionArguments = [
-      this.loan,
-      this.timeDueUs,
-      this.principal,
-      this.interest,
-      this.fee,
-    ];
+    const functionArguments = [this.loan, this.timeDueUs, this.principal, this.interest, this.fee];
 
     return this.createEnhancedBuilderResult([], functionArguments);
   }
@@ -216,7 +204,7 @@ export class UpdateCurrentPaymentFeeBySeedBuilder extends HybridLoanBookBuilder 
   private newFee?: string;
 
   constructor(moduleAddress: string) {
-    super(moduleAddress, "update_current_payment_fee_by_seed");
+    super(moduleAddress, 'update_current_payment_fee_by_seed');
   }
 
   setConfig(config: ObjectAddress): this {
@@ -235,15 +223,11 @@ export class UpdateCurrentPaymentFeeBySeedBuilder extends HybridLoanBookBuilder 
   }
 
   build(): EnhancedBuilderResult {
-    if (!this.config) throw new Error("Config is required");
-    if (!this.loanSeed) throw new Error("Loan seed is required");
-    if (!this.newFee) throw new Error("New fee is required");
+    if (!this.config) throw new Error('Config is required');
+    if (!this.loanSeed) throw new Error('Loan seed is required');
+    if (!this.newFee) throw new Error('New fee is required');
 
-    const functionArguments = [
-      this.config,
-      Array.from(this.loanSeed),
-      this.newFee,
-    ];
+    const functionArguments = [this.config, Array.from(this.loanSeed), this.newFee];
 
     return this.createEnhancedBuilderResult([], functionArguments);
   }
@@ -260,7 +244,7 @@ export class AddFeeAndInterestToCurrentPaymentBySeedBuilder extends HybridLoanBo
   private additionalInterest?: string;
 
   constructor(moduleAddress: string) {
-    super(moduleAddress, "add_fee_and_interest_to_current_payment_by_seed");
+    super(moduleAddress, 'add_fee_and_interest_to_current_payment_by_seed');
   }
 
   setConfig(config: ObjectAddress): this {
@@ -284,10 +268,10 @@ export class AddFeeAndInterestToCurrentPaymentBySeedBuilder extends HybridLoanBo
   }
 
   build(): EnhancedBuilderResult {
-    if (!this.config) throw new Error("Config is required");
-    if (!this.loanSeed) throw new Error("Loan seed is required");
-    if (!this.additionalFee) throw new Error("Additional fee is required");
-    if (!this.additionalInterest) throw new Error("Additional interest is required");
+    if (!this.config) throw new Error('Config is required');
+    if (!this.loanSeed) throw new Error('Loan seed is required');
+    if (!this.additionalFee) throw new Error('Additional fee is required');
+    if (!this.additionalInterest) throw new Error('Additional interest is required');
 
     const functionArguments = [
       this.config,
@@ -315,7 +299,7 @@ export class UpdatePaymentScheduleByIndexAndSeedBuilder extends HybridLoanBookBu
   private newStatus?: number;
 
   constructor(moduleAddress: string) {
-    super(moduleAddress, "update_payment_schedule_by_index_and_seed");
+    super(moduleAddress, 'update_payment_schedule_by_index_and_seed');
   }
 
   setConfig(config: ObjectAddress): this {
@@ -359,14 +343,14 @@ export class UpdatePaymentScheduleByIndexAndSeedBuilder extends HybridLoanBookBu
   }
 
   build(): EnhancedBuilderResult {
-    if (!this.config) throw new Error("Config is required");
-    if (!this.loanSeed) throw new Error("Loan seed is required");
-    if (this.index === undefined) throw new Error("Index is required");
-    if (!this.newTimeDueUs) throw new Error("New time due is required");
-    if (!this.newPrincipal) throw new Error("New principal is required");
-    if (!this.newInterest) throw new Error("New interest is required");
-    if (!this.newFee) throw new Error("New fee is required");
-    if (this.newStatus === undefined) throw new Error("New status is required");
+    if (!this.config) throw new Error('Config is required');
+    if (!this.loanSeed) throw new Error('Loan seed is required');
+    if (this.index === undefined) throw new Error('Index is required');
+    if (!this.newTimeDueUs) throw new Error('New time due is required');
+    if (!this.newPrincipal) throw new Error('New principal is required');
+    if (!this.newInterest) throw new Error('New interest is required');
+    if (!this.newFee) throw new Error('New fee is required');
+    if (this.newStatus === undefined) throw new Error('New status is required');
 
     const functionArguments = [
       this.config,
@@ -396,7 +380,7 @@ export class UpdatePaymentScheduleBySeedBuilder extends HybridLoanBookBuilder {
   private fee: string[] = [];
 
   constructor(moduleAddress: string) {
-    super(moduleAddress, "update_payment_schedule_by_seed");
+    super(moduleAddress, 'update_payment_schedule_by_seed');
   }
 
   setConfig(config: ObjectAddress): this {
@@ -423,9 +407,9 @@ export class UpdatePaymentScheduleBySeedBuilder extends HybridLoanBookBuilder {
   }
 
   build(): EnhancedBuilderResult {
-    if (!this.config) throw new Error("Config is required");
-    if (!this.loanSeed) throw new Error("Loan seed is required");
-    if (this.timeDueUs.length === 0) throw new Error("Payment schedule is required");
+    if (!this.config) throw new Error('Config is required');
+    if (!this.loanSeed) throw new Error('Loan seed is required');
+    if (this.timeDueUs.length === 0) throw new Error('Payment schedule is required');
 
     const functionArguments = [
       this.config,

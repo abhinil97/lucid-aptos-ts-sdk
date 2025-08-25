@@ -22,7 +22,9 @@ export type HybridLoanBookError = keyof typeof HYBRID_LOAN_BOOK_ERRORS;
  * @returns A descriptive error message
  */
 export function getErrorMessage(errorCode: number): string {
-  return HYBRID_LOAN_BOOK_ERRORS[errorCode as HybridLoanBookError] || `Unknown error code: ${errorCode}`;
+  return (
+    HYBRID_LOAN_BOOK_ERRORS[errorCode as HybridLoanBookError] || `Unknown error code: ${errorCode}`
+  );
 }
 
 /**

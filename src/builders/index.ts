@@ -1,62 +1,95 @@
 // Builders module exports
 // This module contains builder classes for constructing Hybrid Loan Book transactions
 
-import type { BuilderResult, EnhancedBuilderResult } from "../types";
-import type { InputEntryFunctionData } from "@aptos-labs/ts-sdk";
+// Export base builder interfaces and classes
+export * from './base';
 
-// Base builder interface that all builders implement
-export interface BaseBuilder {
-  build(): BuilderResult;
-}
+// Generic transaction and account builders (for backward compatibility with tests)
 
-// Enhanced builder interface that provides direct Aptos SDK compatibility
-export interface EnhancedBaseBuilder {
-  build(): EnhancedBuilderResult;
-}
+/**
+ * Generic transaction builder for basic Aptos transactions
+ */
+export class TransactionBuilder {
+  private sender: string = '';
+  private payload: any = null;
+  private gasLimit: number = 2000;
+  private maxGasAmount: number = 2000;
+  private gasUnitPrice: number = 100;
 
-// Abstract base class for all Hybrid Loan Book builders
-export abstract class HybridLoanBookBuilder implements BaseBuilder {
-  protected moduleAddress: string;
-  protected functionName: string;
-
-  constructor(moduleAddress: string, functionName: string) {
-    this.moduleAddress = moduleAddress;
-    this.functionName = functionName;
+  setSender(sender: string): this {
+    this.sender = sender;
+    return this;
   }
 
-  abstract build(): BuilderResult;
-
-  protected createBuilderResult(
-    typeArguments: string[] = [],
-    functionArguments: any[] = []
-  ): BuilderResult {
-    return {
-      function: `${this.moduleAddress}::pact::hybrid_loan_book::${this.functionName}`,
-      typeArguments,
-      functionArguments,
-      functionName: this.functionName,
-      moduleName: "hybrid_loan_book",
-    };
+  setPayload(payload: any): this {
+    this.payload = payload;
+    return this;
   }
 
-  protected createEnhancedBuilderResult(
-    typeArguments: string[] = [],
-    functionArguments: any[] = []
-  ): EnhancedBuilderResult {
-    const baseResult = this.createBuilderResult(typeArguments, functionArguments);
-    
+  setGasLimit(gasLimit: number): this {
+    this.gasLimit = gasLimit;
+    return this;
+  }
+
+  setMaxGasAmount(maxGasAmount: number): this {
+    this.maxGasAmount = maxGasAmount;
+    return this;
+  }
+
+  setGasUnitPrice(gasUnitPrice: number): this {
+    this.gasUnitPrice = gasUnitPrice;
+    return this;
+  }
+
+  build() {
     return {
-      ...baseResult,
-      toTransactionData(): InputEntryFunctionData {
-        return {
-          function: baseResult.function,
-          typeArguments: baseResult.typeArguments || [],
-          functionArguments: baseResult.functionArguments,
-        };
-      },
+      sender: this.sender,
+      payload: this.payload,
+      gasLimit: this.gasLimit,
+      maxGasAmount: this.maxGasAmount,
+      gasUnitPrice: this.gasUnitPrice,
     };
   }
 }
+
+/**
+ * Generic account builder for basic Aptos accounts
+ */
+export class AccountBuilder {
+  private address: string = '';
+  private sequenceNumber: string = '0';
+  private authenticationKey: string = '';
+
+  setAddress(address: string): this {
+    this.address = address;
+    return this;
+  }
+
+  setSequenceNumber(sequenceNumber: string): this {
+    this.sequenceNumber = sequenceNumber;
+    return this;
+  }
+
+  setAuthenticationKey(authenticationKey: string): this {
+    this.authenticationKey = authenticationKey;
+    return this;
+  }
+
+  build() {
+    return {
+      address: this.address,
+      sequenceNumber: this.sequenceNumber,
+      authenticationKey: this.authenticationKey,
+    };
+  }
+}
+
+// Re-export all specific builders
+export * from './loan-creation';
+export * from './loan-repayment';
+export * from './documents';
+export * from './configuration';
+export * from './payment-schedule';
 
 // Placeholder export to prevent module resolution errors
 export const BUILDERS_MODULE = 'builders';
